@@ -1,5 +1,8 @@
+from textnode import TextNode, TextType
+
 def main():
-    print("hello world")
+    foo = TextNode("This is a text node", TextType.BOLD, "https://www.boot.dev")
+    print(foo)
 
 
 if __name__ == "__main__":
