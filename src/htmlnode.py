@@ -14,7 +14,19 @@ class HTMLNode():
     
     def props_to_html(self):
         html = ''
-        for k, v in self.props.items():
-            html += f' {k}="{v}"'
+        if self.props:
+            for k, v in self.props.items():
+                html += f' {k}="{v}"'
         return html
-    
+
+class LeafNode(HTMLNode):
+    def __init__(self, tag, value, children=None, props=None):
+        super().__init__(tag, value, children, props)
+        self.children = None
+
+    def to_html(self):
+        if len(self.value) == 0:
+            raise ValueError
+        if len(self.tag) == 0:
+            return self.value
+        return f'<{self.tag}{self.props_to_html()}>{self.value}</{self.tag}>'
