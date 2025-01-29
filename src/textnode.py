@@ -132,3 +132,13 @@ def extract_markdown_links(text):
     if not text:
         return []
     return re.findall(r"(?<!!)\[(.*?)\]\((.*?)\)", text)
+
+def markdown_to_blocks(markdown):
+    blocks = markdown.split("\n")
+    for block in blocks:
+        if block:
+            blocks[blocks.index(block)] = block.strip()
+            continue
+        blocks.remove(block)
+    return blocks
+        

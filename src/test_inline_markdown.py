@@ -6,6 +6,7 @@ from textnode import (
     split_nodes_image,
     split_nodes_link,
     text_to_textnodes,
+    markdown_to_blocks,
 )
 
 from textnode import TextNode, TextType
@@ -210,6 +211,26 @@ class TestExtractMarkdownLinks(unittest.TestCase):
         lnks = extract_markdown_links("This is text with a link [to boot dev](https://www.boot.dev) and [to youtube](https://www.youtube.com/@bootdotdev)")
         self.assertListEqual(lnks, [("to boot dev", "https://www.boot.dev"), ("to youtube", "https://www.youtube.com/@bootdotdev")])
 
+class TestMarkdownToBlocks(unittest.TestCase):
+    def test_markdown_to_blocks(self):
+        result = [
+            '# This is a heading', 
+            'This is a paragraph of text. It has some **bold** and *italic* words inside of it.', 
+            '* This is the first list item in a list block', 
+            '* This is a list item', '* This is another list item'
+            ]
+        markdown = '''# This is a heading
+
+This is a paragraph of text. It has some **bold** and *italic* words inside of it.
+
+* This is the first list item in a list block
+* This is a list item
+* This is another list item'''
+        self.assertListEqual(result, markdown_to_blocks(markdown))
+    
+    def test_remove_whitespace(self):
+        markdown = "      test      "
+        self.assertListEqual(["test"], markdown_to_blocks(markdown))
 
 if __name__ == "__main__":
     unittest.main()
