@@ -7,6 +7,7 @@ from textnode import (
     split_nodes_link,
     text_to_textnodes,
     markdown_to_blocks,
+    block_to_block_type,
 )
 
 from textnode import TextNode, TextType
@@ -231,6 +232,39 @@ This is a paragraph of text. It has some **bold** and *italic* words inside of i
     def test_remove_whitespace(self):
         markdown = "      test      "
         self.assertListEqual(["test"], markdown_to_blocks(markdown))
+
+    def test_empty_block(self):
+        self.assertEqual("paragraph", block_to_block_type(""))
+    
+    def test_heading_block(self):
+        self.assertEqual("heading", block_to_block_type("# test heading"))
+    
+    def test_too_many_hashmarks(self):
+        self.assertEqual("paragraph", block_to_block_type("####### Master Skywalker there's too many of them!"))
+    
+    def test_coding_block(self):
+        self.assertEqual("code", block_to_block_type("```\ncode block test\n```"))
+
+    def test_incorrect_code_block(self):
+        self.assertEqual("paragraph", block_to_block_type("```where are those backtickas?"))
+
+    def test_quote_block(self):
+        self.assertEqual("quote", block_to_block_type(">What a cool quote!"))
+
+    def test_ul_asterisk(self):
+        self.assertEqual("unordered_list", block_to_block_type("* Wow it works!"))
+
+    def test_ul_dash(self):
+        self.assertEqual("unordered_list", block_to_block_type("- Wow it works!"))
+    
+    def test_ul_no_space(self):
+        self.assertEqual("paragraph", block_to_block_type("*Oh no, there is no space!"))
+
+    def test_ol_block(self):
+        self.assertEqual("ordered_list", block_to_block_type("1. The beginning"))
+    
+    def test_ol_no_space(self):
+        self.assertEqual("paragraph", block_to_block_type("1.This is incorrect"))
 
 if __name__ == "__main__":
     unittest.main()
